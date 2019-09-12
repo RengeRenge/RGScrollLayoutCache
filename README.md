@@ -66,15 +66,18 @@ However, the performance of this way is not satisfactory after testing.
 ```objective-c
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
+    
     CGRect last = self.tableView.rg_lastFrame;
-    // width is related to layout in this example.
-    if (self.view.bounds.size.width != last.size.width) {
-        [self.tableView rg_clearlayoutCache];
-        [self.tableView rg_startCachingLayoutForIndexPaths:self.tableView.indexPathsForVisibleRows];
-    }
+    NSArray <NSIndexPath *> *visible = self.tableView.indexPathsForVisibleRows;
     
     self.tableView.frame = self.view.bounds;
     [self.tableView rg_updateLastFrame];
+    
+    // width is related to layout in this example.
+    if (self.tableView.frame.size.width != last.size.width) {
+        [self.tableView rg_clearlayoutCache];
+        [self.tableView rg_startCachingLayoutForIndexPaths:visible];
+    }
 }
 ```
 ```objective-c
