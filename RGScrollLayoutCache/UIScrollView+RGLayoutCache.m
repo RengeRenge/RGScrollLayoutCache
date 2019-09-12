@@ -11,7 +11,7 @@
 
 static BOOL RGLayoutCacheLogEnable = NO;
 #ifdef DEBUG
-#define RGLayoutCacheLog(...) NSLog(__VA_ARGS__)
+#define RGLayoutCacheLog(...) RGLayoutCacheLogEnable?NSLog(__VA_ARGS__):(__VA_ARGS__)
 #else
 #define RGLayoutCacheLog(...)
 #endif
