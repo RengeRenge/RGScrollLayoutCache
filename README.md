@@ -80,14 +80,15 @@ However, the performance of this way is not satisfactory after testing.
 [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
 ```
 
-- Enabel log
+- Enable log
 ```objective-c
 [UIScrollView rg_setCacheLogEnable:YES];
 ```
 
 ### Test Report
 
-This demo generates 1000 rows of data and sleep 0.01s in layout method
+This demo generates 1000 rows of text randomly and sleep 0.01s in layout method
+
 - [Demo video](https://renged.xyz/static/image/config/RGScrollLayoutCache.MP4)
 
 - Demo GIF
