@@ -61,3 +61,8 @@ fastlane/test_output
 # https://github.com/johnno1962/injectionforxcode
 
 iOSInjectionProject/
+.DS_Store
+Podfile.lock
+Pods
+RGScrollLayoutCache.xcodeproj/project.xcworkspace
+RGScrollLayoutCache.xcworkspace
