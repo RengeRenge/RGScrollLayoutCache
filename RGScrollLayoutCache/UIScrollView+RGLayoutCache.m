@@ -13,7 +13,7 @@ static BOOL RGLayoutCacheLogEnable = NO;
 #ifdef DEBUG
 #define RGLayoutCacheLog(fmt, ...) RGLayoutCacheLogEnable?NSLog(fmt, ##__VA_ARGS__):(fmt)
 #else
-RGLayoutCacheLog(a)
+#define RGLayoutCacheLog(fmt, ...) (fmt)
 #endif
 
 @interface UIScrollView ()
