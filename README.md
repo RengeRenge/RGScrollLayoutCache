@@ -3,10 +3,10 @@ Pre-load layout of UITableView or UICollectionView in background thread
 
 - RGScrollLayoutCache is a category of UIScrollview
 - RGScrollLayoutCache could help UITableView or UICollectionView pre-load layout and save result in cache
-- RGScrollLayoutCache auto cache refer to [Example app using Photos framework](https://developer.apple.com/library/archive/samplecode/UsingPhotosFramework/Introduction/Intro.html#//apple_ref/doc/uid/TP40014575)
+- The auto cache loading mechanism refer to [Example app using Photos framework](https://developer.apple.com/library/archive/samplecode/UsingPhotosFramework/Introduction/Intro.html#//apple_ref/doc/uid/TP40014575)
 
 ## Installation
-To add it to your app, copy the two classes `UIScrollView+RGLayoutCache.h/.m` into your Xcode project or add via [CocoaPods](http://cocoapods.org) by adding this to your Podfile:
+Add via [CocoaPods](http://cocoapods.org) by adding this to your Podfile:
 
 ```ruby
 pod 'RGScrollLayoutCache'
@@ -18,13 +18,13 @@ pod 'RGScrollLayoutCache'
 [self.tableView rg_setLayoutCacheDelegate:self];
 ```
 
-- Auto cache 
+- Enable auto cache 
 ```objective-c
 self.tableView.rg_autoCache = YES;
 ```
-- Custom cache
+- Else use custom cache
 
-RGScrollLayoutCache can cooperate with UITableViewDataSourcePrefetching.
+RGScrollLayoutCache could cooperate with UITableViewDataSourcePrefetching.
 However, the performance of this way is not satisfactory after testing.
 ```objective-c
 - (void)tableView:(UITableView *)tableView prefetchRowsAtIndexPaths:(NSArray<NSIndexPath *> *)indexPaths {
