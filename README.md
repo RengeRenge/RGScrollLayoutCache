@@ -68,11 +68,13 @@ However, the performance of this way is not satisfactory after testing.
     [super viewWillLayoutSubviews];
     CGRect last = self.tableView.rg_lastFrame;
     // width is related to layout in this example.
-    if (self.tableView.frame.size.width != last.size.width) {
-        [self.tableView rg_updateLastFrame];
+    if (self.view.bounds.size.width != last.size.width) {
         [self.tableView rg_clearlayoutCache];
-        [self.tableView reloadData];
+        [self.tableView rg_startCachingLayoutForIndexPaths:self.tableView.indexPathsForVisibleRows];
     }
+    
+    self.tableView.frame = self.view.bounds;
+    [self.tableView rg_updateLastFrame];
 }
 ```
 ```objective-c
