@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "RGScrollLayoutCache"
-  s.version      = "1.0.2"
+  s.version      = "1.1.0"
   s.summary      = "Pre-load layout of UITableView or UICollectionView in background thread"
 
   # This description is used to generate tags and improve search results.
