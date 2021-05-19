@@ -12,41 +12,43 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol RGLayoutCacheDelegate <NSObject>
 
-- (CGSize)scrollView:(UIScrollView *)scrollView sizeForRowAtIndexPath:(NSIndexPath *)indexPath isMainThread:(BOOL)isMainThread;
+- (NSString *)scrollView:(UIScrollView *)scrollView cacheSizeIdAtIndexPath:(NSIndexPath *)indexPath;
+
+- (CGSize)scrollView:(UIScrollView *)scrollView scrollViewFrame:(CGRect)frame cacheSizeForRowAtIndexPath:(NSIndexPath *)indexPath isMainThread:(BOOL)isMainThread;
 
 @end
 
+typedef enum : int {
+    RGLayoutCacheDependOnWidth,
+    RGLayoutCacheDependOnHeight,
+    RGLayoutCacheDependOnSize,
+} RGLayoutCacheDependOn;
+
 @interface UIScrollView (RGLayoutCache)
 
+@property (nonatomic, weak, nullable) id <RGLayoutCacheDelegate> rg_layoutCacheDelegate;
+
+/// default 40
+@property (nonatomic, assign) NSUInteger rg_maxLayoutCacheConcurrentOperationCount;
+
+@property (nonatomic, assign) BOOL rg_layoutCacheLogEnable;
+
 /**
- enable auto cache
+ enable auto layout cache
  this method add KVO for contentOffset and pre fetch layout
  don't need to call method like rg_startCachingLayoutForIndexPaths...
  */
-@property (nonatomic, assign) BOOL rg_autoCache; // default NO
-
-- (void)rg_setLayoutCacheDelegate:(nullable id <RGLayoutCacheDelegate>)delegate;
-
-- (void)rg_setMaxCacheOperationCount:(NSUInteger)count; // default 40
+@property (nonatomic, assign) BOOL rg_autoLayoutCache; // default NO
 
 - (void)rg_startCachingLayoutForIndexPaths:(NSArray<NSIndexPath *> *)indexPaths;
+- (void)rg_startCachingLayoutForSections:(NSIndexSet *)sections count:(NSInteger(NS_NOESCAPE^)(NSInteger section))count;
 - (void)rg_stopCachingLayoutForIndexPaths:(NSArray<NSIndexPath *> *)indexPaths;
-- (void)rg_stopCachingImagesForAllIndexPath;
+- (void)rg_stopCachingLayoutForAllIndexPath;
 
 - (void)rg_clearlayoutCache;
 - (void)rg_clearlayoutCacheAtIndexPaths:(NSArray<NSIndexPath *> *)indexPaths;
 
-/**
- record last frame, if frame changed, you may call rg_clearlayoutCache to use new layout
- */
-- (CGRect)rg_lastFrame;
-- (void)rg_updateLastFrame;
-
-/**
- record now frame, if RGLayoutCacheDelegate called not in mainThread, you may need this frame to use do layout
- */
-- (CGRect)rg_nowFrame;
-
+@property (nonatomic, assign) RGLayoutCacheDependOn rg_layoutCacheDependOn;
 
 /**
  get size in cache
@@ -58,9 +60,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (CGSize)rg_layoutCacheSizeAtIndexPath:(NSIndexPath *)indexPath onlyCache:(BOOL)onlyCache;
 
 - (CGSize)rg_layoutCacheSizeAtIndexPath:(NSIndexPath *)indexPath;
-
-
-+ (void)rg_setCacheLogEnable:(BOOL)enable;
 
 @end
 

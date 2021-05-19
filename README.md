@@ -15,12 +15,12 @@ pod 'RGScrollLayoutCache'
 ## Usage
 - Set cache delegate
 ```objective-c
-[self.tableView rg_setLayoutCacheDelegate:self];
+self.tableView.rg_layoutCacheDelegate = self;
 ```
 
 - Enable auto cache 
 ```objective-c
-self.tableView.rg_autoCache = YES;
+self.tableView.rg_autoLayoutCache = YES;
 ```
 - Else use custom cache
 
@@ -36,12 +36,18 @@ However, the performance of this way is not satisfactory after testing.
 }
 ```
 
+- RGLayoutCacheDependOn
+```objective-c
+// clear layout cache when table view's width changed, because layout size depend on table view's width
+self.tableView.rg_layoutCacheDependOn = RGLayoutCacheDependOnWidth;
+```
+
 - RGLayoutCacheDelegate
 ```objective-c
 // Do layout at this delegate.
-- (CGSize)scrollView:(UIScrollView *)scrollView sizeForRowAtIndexPath:(NSIndexPath *)indexPath isMainThread:(BOOL)isMainThread {
+- (CGSize)scrollView:(UIScrollView *)scrollView scrollViewFrame:(CGRect)frame cacheSizeForRowAtIndexPath:(NSIndexPath *)indexPath isMainThread:(BOOL)isMainThread {
     // safe-get size whether in the main thread or in the background thread
-    CGSize size = scrollView.rg_nowFrame.size;
+    CGSize size = frame.size;
     
     // get data source. ⚠️realm database need get a new instance in other thread.
     RLMRealm *realm = nil
@@ -56,38 +62,23 @@ However, the performance of this way is not satisfactory after testing.
     return size;
 }
 
+// Provide cache size identifier
+- (NSString *)scrollView:(UIScrollView *)scrollView cacheSizeIdAtIndexPath:(NSIndexPath *)indexPath {
+    return _messages[indexPath.row].msgId;
+}
+```
+
+- Get size from layout cache
+
+```objective-c
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return [tableView rg_layoutCacheSizeAtIndexPath:indexPath].height;
 }
 ```
 
-- Clear cache when data source changed or scrollView size changed
-
-```objective-c
-- (void)viewWillLayoutSubviews {
-    [super viewWillLayoutSubviews];
-    
-    CGRect last = self.tableView.rg_lastFrame;
-    NSArray <NSIndexPath *> *visible = self.tableView.indexPathsForVisibleRows;
-    
-    self.tableView.frame = self.view.bounds;
-    [self.tableView rg_updateLastFrame];
-    
-    // width is related to layout in this example.
-    if (self.tableView.frame.size.width != last.size.width) {
-        [self.tableView rg_clearlayoutCache];
-        [self.tableView rg_startCachingLayoutForIndexPaths:visible];
-    }
-}
-```
-```objective-c
-[self.tableView rg_clearlayoutCacheAtIndexPaths:indexPaths];
-[self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationAutomatic];
-```
-
 - Enable log
 ```objective-c
-[UIScrollView rg_setCacheLogEnable:YES];
+self.tableView.rg_layoutCacheLogEnable = YES;
 ```
 
 ### Test Report
